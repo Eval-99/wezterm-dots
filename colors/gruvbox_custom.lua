@@ -85,23 +85,23 @@ local function gruv(config)
         strikethrough = false,
       },
 
-      new_tab = {
-        bg_color = '#b8bb26',
-        fg_color = '#1d2122',
-        intensity = 'Normal',
-        italic = true,
-        underline = 'None',
-        strikethrough = false,
-      },
-
-      new_tab_hover = {
-        bg_color = '#d3869b',
-        fg_color = '#1d2122',
-        intensity = 'Normal',
-        italic = true,
-        underline = 'None',
-        strikethrough = false,
-      },
+      -- new_tab = {
+      --   bg_color = '#b8bb26',
+      --   fg_color = '#1d2122',
+      --   intensity = 'Normal',
+      --   italic = true,
+      --   underline = 'None',
+      --   strikethrough = false,
+      -- },
+      --
+      -- new_tab_hover = {
+      --   bg_color = '#d3869b',
+      --   fg_color = '#1d2122',
+      --   intensity = 'Normal',
+      --   italic = true,
+      --   underline = 'None',
+      --   strikethrough = false,
+      -- },
     },
   }
 end
