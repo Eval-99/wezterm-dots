@@ -1,5 +1,6 @@
 local wezterm = require('wezterm')
 local act = wezterm.action
+local mux = wezterm.mux
 
 return {
   -- Spawn panes and tabs
@@ -39,7 +40,7 @@ return {
   { key = 'l', mods = 'ALT', action = act.ActivatePaneDirection('Right') },
   { key = 'L', mods = 'ALT|SHIFT', action = act.ActivateTabRelative(1) },
   { key = 'H', mods = 'ALT|SHIFT', action = act.ActivateTabRelative(-1) },
-  { key = 'c', mods = 'LEADER', action = act.PaneSelect({ mode = 'SwapWithActive' }) },
+  { key = 'c', mods = 'LEADER', action = act.PaneSelect({ mode = 'SwapWithActiveKeepFocus' }) },
 
   -- Goto tab
   { key = '1', mods = 'LEADER', action = act.ActivateTab(0) },
@@ -56,6 +57,73 @@ return {
   -- Change tab order
   { key = 'l', mods = 'LEADER', action = act.MoveTabRelative(1) },
   { key = 'h', mods = 'LEADER', action = act.MoveTabRelative(-1) },
+
+  -- Rename tab
+  {
+    key = 'r',
+    mods = 'LEADER',
+    action = act.PromptInputLine({
+      description = wezterm.format({
+        { Attribute = { Intensity = 'Bold' } },
+        { Foreground = { Color = '#fb4934' } },
+        { Text = 'Enter new name for tab' },
+      }),
+      initial_value = '',
+      action = wezterm.action_callback(function(window, pane, line)
+        if line then
+          window:active_tab():set_title(line)
+        end
+      end),
+    }),
+  },
+
+  {
+    key = 'N',
+    mods = 'CTRL|SHIFT',
+    action = act.PromptInputLine({
+      description = wezterm.format({
+        { Attribute = { Intensity = 'Bold' } },
+        { Foreground = { Color = '#fb4934' } },
+        { Text = 'Enter name for new workspace' },
+      }),
+      action = wezterm.action_callback(function(window, pane, line)
+        -- line will be `nil` if they hit escape without entering anything
+        -- An empty string if they just hit enter
+        -- Or the actual line of text they wrote
+        if line then
+          window:perform_action(
+            act.SwitchToWorkspace({
+              name = line,
+            }),
+            pane
+          )
+        end
+      end),
+    }),
+  },
+
+  -- from blog. rename workspace
+  {
+    key = '$',
+    mods = 'LEADER|SHIFT',
+    action = act.PromptInputLine({
+      description = 'Enter new name for session',
+      action = wezterm.action_callback(function(window, pane, line)
+        if line then
+          mux.rename_workspace(window:mux_window():get_workspace(), line)
+        end
+      end),
+    }),
+  },
+
+  -- from wezterm conf. Show workspaces
+  {
+    key = '9',
+    mods = 'ALT',
+    action = act.ShowLauncherArgs({
+      flags = 'FUZZY|WORKSPACES',
+    }),
+  },
 
   -- Copy and paste
   { key = 'C', mods = 'CTRL|SHIFT', action = act({ CopyTo = 'ClipboardAndPrimarySelection' }) },
