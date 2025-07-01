@@ -1,7 +1,7 @@
 local function gruv(config)
   config.inactive_pane_hsb = {
-    saturation = 1.0,
-    brightness = 1.0,
+    saturation = 0.9,
+    brightness = 0.9,
   }
 
   return {
