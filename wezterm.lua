@@ -48,6 +48,6 @@ config.enable_kitty_keyboard = true
 config.pane_focus_follows_mouse = true
 
 -- Plugins
--- require('plugins.resurrect')(config)
+require('plugins.resurrect')(config)
 
 return config

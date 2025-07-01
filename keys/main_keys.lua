@@ -77,6 +77,25 @@ return {
     }),
   },
 
+  -- Rename workspace
+  {
+    key = 'R',
+    mods = 'LEADER|SHIFT',
+    action = act.PromptInputLine({
+      description = wezterm.format({
+        { Attribute = { Intensity = 'Bold' } },
+        { Foreground = { Color = '#fb4934' } },
+        { Text = 'Enter new name for workspace' },
+      }),
+      action = wezterm.action_callback(function(window, pane, line)
+        if line then
+          mux.rename_workspace(window:mux_window():get_workspace(), line)
+        end
+      end),
+    }),
+  },
+
+  -- Create workspace
   {
     key = 'N',
     mods = 'CTRL|SHIFT',
@@ -87,9 +106,6 @@ return {
         { Text = 'Enter name for new workspace' },
       }),
       action = wezterm.action_callback(function(window, pane, line)
-        -- line will be `nil` if they hit escape without entering anything
-        -- An empty string if they just hit enter
-        -- Or the actual line of text they wrote
         if line then
           window:perform_action(
             act.SwitchToWorkspace({
@@ -102,24 +118,10 @@ return {
     }),
   },
 
-  -- from blog. rename workspace
+  -- Show workspaces
   {
-    key = '$',
-    mods = 'LEADER|SHIFT',
-    action = act.PromptInputLine({
-      description = 'Enter new name for session',
-      action = wezterm.action_callback(function(window, pane, line)
-        if line then
-          mux.rename_workspace(window:mux_window():get_workspace(), line)
-        end
-      end),
-    }),
-  },
-
-  -- from wezterm conf. Show workspaces
-  {
-    key = '9',
-    mods = 'ALT',
+    key = 'w',
+    mods = 'LEADER',
     action = act.ShowLauncherArgs({
       flags = 'FUZZY|WORKSPACES',
     }),
